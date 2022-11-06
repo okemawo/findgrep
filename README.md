@@ -6,18 +6,12 @@
 ## Author : Okemawo Aniyikaiye Obaodfin (OAO)
 ## Date : 03 November 2023
 ### Description : 
-### Recursively searches files in and below a given directory (by default, the current directory) for a specified regular expression. By default, the search will examine only C and C++ files—that is, those that end in .c, .cpp, h, or .hpp—but this can be overridden via command line options.
+### Recursively searches files in and below a given directory (by default, the current directory) for a specified regular expression. By default, the search will examine only C and C++ files—that is, those that end in .c, .cpp, h, or .hpp—but this can be overridden via command line options. The script returns an exit code of 1 when an eror occurs and an exit code of 0 when it executes successfully. You can observe the usage details about the findgrep script along with its syntax.
 
 <br/>
 <br/>
 
-### The script returns an exit code of 1 when an eror occurs and an exit code of 0 when it executes successfully.
-### You can observe the usage details about the findgrep script along with its syntax
-
-<br/>
-<br/>
-
-### findgrep [options] <egrep-pattern>
+### findgrep [options]  "egrep-pattern"
 
 <br/>
 
