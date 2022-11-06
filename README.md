@@ -9,11 +9,14 @@
 ###               those that end in .c, .cpp, h, or .hpp—but this can be overridden via command line options.
               
 
+
 ### The script returns an exit code of 1 when an eror occurs and an exit code of 0 when it executes successfully.
 ### You can observe the usage details about the findgrep script along with its syntax
 
+
 ### findgrep [options] <egrep-pattern>
 
+  
 ###     Options can be one or more of:
 ###       --c                   C mode (the default): search files ending in .c, .h, .cpp and .hpp
 ###       --py                  Python mode: search files ending in .py, .json, and .xml
