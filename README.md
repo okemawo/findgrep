@@ -24,3 +24,8 @@
 ###       -i | --insensitive    Perform case insensitive search (default is case sensitive)
 ###       --top <rootdir>       Set the root directory of the search; default is cwd
 ###       --up                  Set the root of the search to parent of cwd; equivalent to “--top=..”
+
+<br/>  
+FOR EXAMPLE :
+<br/>
+findgrep --c "include"
