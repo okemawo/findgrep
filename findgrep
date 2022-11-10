@@ -7,7 +7,6 @@
 #               specified regular expression. By default, the search will examine only C and C++ files—that is,
 #               those that end in .c, .cpp, h, or .hpp—but this can be overridden via command line options.
 
-
 # save the name of the script in a variable
 SCRIPT_NAME=`basename $0`
 
@@ -28,26 +27,26 @@ DIR="./"
 # it is executed whenever an incorrect command is issued or when an incorrect pattern is detected
 
 usage () {
-    echo " $SCRIPT_NAME [options] <egrep-pattern>                                                                                   "
+    echo "Usage: $SCRIPT_NAME [options] <egrep-pattern>                                                                                  "
     echo "                                                                                                                               "
-    echo " Recursively searches files in and below a given directory (by default, the current directory) for a                           "
-    echo " specified regular expression. By default, the search will examine only C and C++                                              "
-    echo " those that end in .c, .cpp, h, or .hpp—but this can be overridden via command line options.                                   "
+    echo "Recursively searches files in and below a given directory (by default, the current directory) for a                            "
+    echo "specified regular expression. By default, the search will examine only C and C++                                               "
+    echo "those that end in .c, .cpp, h, or .hpp—but this can be overridden via command line options.                                    "
     echo "                                                                                                                               "
-    echo " <egrep-pattern> is an extended regular expression as used by grep -E.                                                         "
+    echo "<egrep-pattern> is an extended regular expression as used by grep -E.                                                          "
     echo "                                                                                                                               "
-    echo " Options can be one or more of:                                                                                                "
+    echo "Options can be one or more of:                                                                                                 "
     echo "                                                                                                                               "
-    echo "       --c                     Python mode: search files ending in .py, .json, and .xml                                        "
-    echo "       --py                    Python mode: search files ending in .py, .json, and .xml                                        "
-    echo "       --text                  Text mode: search files ending in .txt, .texi, .md, or beginning with the
-name README.    "
-    echo "       --all                   Look at all files, not just C/C++ files                                                         "
-    echo "       --help                  Print this usage message and exit                                                               "
-    echo "       -i | --insensitive      Perform case insensitive search (default is case sensitive)                                     "
-    echo "       --top                   Set the root directory of the search; default is cwd                                            "
-    echo "       --up                    Set the root of the search to parent of cwd; equivalent to “--top=..”                           "
-    echo "                                                                                                                               "
+    echo " --c                     C mode (the default): search files ending in .c, .cpp, .h, .hpp                                       "
+    echo " --py                    Python mode: search files ending in .py, .json, and .xml                                      "
+    echo " --text                  Text mode: search files ending in .txt, .texi, .md, or beginning with the name README.        "
+    echo " --all                   Look at all files, not just C/C++ files                                                               "
+    echo " --help                  Print this usage message and exit                                                             "
+    echo " -i | --insensitive      Perform case insensitive search (default is case sensitive)                                   "
+    echo " --top                   Set the root directory of the search; default is cwd                                          "
+    echo " --up                    Set the root of the search to parent of cwd; equivalent to “--top=..”                            "
+
+    exit $1
 }
 
 
@@ -57,11 +56,9 @@ name README.    "
 # exit code 2 for pattern not found, and exit code 1 for an error
 
 inc_exp () {
-    [ "$?" -eq 2 ] && echo "PLEASE ENTER A VALID EXPRESSION TO GREP" && usage && exit 1
-    [ "$?" -eq 1 ] && exit 0
-    [ "$?" -eq 3 ] && exit 1
+            [ "$?" -eq 2 ] && usage 2
+            [ "$?" -eq 1 ] && exit 0
 }
-
 
 
 
@@ -80,10 +77,11 @@ findgrep () {
 # An inner case block to execute commands based on the -i option presence or absence
             case "$CASE" in
                 0)
-                    find "$DIR" -type f \( -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" \) -print0 | xargs -0 egrep --color=auto -n "$1" || inc_exp
+
+                    find "$DIR" -type f \( -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" \) -exec egrep --color=auto -n "$1" {} + || inc_exp
                     ;;
                 1)
-                    find "$DIR" -type f \( -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" \) -print0 | xargs -0 egrep --color=auto -i -n "$1" || inc_exp
+                    find "$DIR" -type f \( -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" \) -exec egrep --color=auto -i -n "$1" {} + || inc_exp
                     ;;
             esac
             ;;
@@ -92,10 +90,11 @@ findgrep () {
 # An inner case block to execute commands based on the -i option presence or absence
             case "$CASE" in
                 0)
-                    find "$DIR" -type f \( -name "*.py" -o -name "*.json" -o -name "*.xml" \) -print0 | xargs -0 egrep --color=auto -n "$1" || inc_exp
+                    find "$DIR" -type f \( -name "*.py" -o -name "*.json" -o -name "*.xml" \) -exec egrep --color=auto -n "$1" {} + || inc_exp
                     ;;
                 1)
-                    find "$DIR" -type f \( -name "*.py" -o -name "*.json" -o -name "*.xml" \) -print0 | xargs -0 egrep --color=auto -i -n "$1" || inc_exp                                    ;;
+                    find "$DIR" -type f \( -name "*.py" -o -name "*.json" -o -name "*.xml" \) -exec egrep --color=auto -i -n "$1" {} + || inc_exp                       
+                    ;;
             esac
             ;;
 
@@ -103,10 +102,10 @@ findgrep () {
 # An inner case block to execute commands based on the -i option presence or absence
             case "$CASE" in
                 0)
-                    find "$DIR" -type f \( -name "*.txt" -o -name "*.texi" -o -name "*.md" -o -name "README.*" \) -print0 | xargs -0 egrep --color=auto -n "$1" || inc_exp
+                    find "$DIR" -type f \( -name "*.txt" -o -name "*.texi" -o -name "*.md" -o -name "README.*" \) -exec egrep --color=auto -n "$1" {} + || inc_exp
                     ;;
                 1)
-                    find "$DIR" -type f \( -name "*.txt" -o -name "*.texi" -o -name "*.md" -o -name "README.*" \) -print0 | xargs -0 egrep --color=auto -i -n "$1" || inc_exp
+                    find "$DIR" -type f \( -name "*.txt" -o -name "*.texi" -o -name "*.md" -o -name "README.*" \) -exec egrep --color=auto -i -n "$1" {} + || inc_exp
                     ;;
             esac
             ;;
@@ -115,10 +114,10 @@ findgrep () {
 # An inner case block to execute commands based on the -i option presence or absence
             case "$CASE" in
                 0)
-                    find "$DIR" -type f -name "*" -print0 | xargs -0 egrep --color=auto -n "$1" || inc_exp
+                    find "$DIR" -type f -name "*" -exec egrep --color=auto -n "$1" {} + || inc_exp
                     ;;
                 1)
-                    find "$DIR" -type f -name "*" -print0 | xargs -0 egrep --color=auto -i -n "$1" || inc_exp
+                    find "$DIR" -type f -name "*" -exec egrep --color=auto -i -n "$1" {} + || inc_exp
             esac
             ;;
 
@@ -129,16 +128,8 @@ findgrep () {
 # end of switch block
 
 
-
-
-
-
 # This expression checks if the arguements suppled to the findgrep command is zero
 # it displays a helpful error message and then executes the usage function if there were not arguements or pattern supplied
-
-[ $# -eq 0 ] && echo "PLEASE ENTER A VALID EXPRESSION TO GREP"  && usage && exit 1
-
-
 
 
 # This is a while loop that repeatedly runs while the arguements are available to the command. it has an inner switch block that checks
@@ -149,7 +140,7 @@ while [ $# -ne 0 ] ; do
 # inner switch block that matches arguemtns to flags or options
      case "$1" in
         --help)
-            usage && exit 0
+            usage 0
             ;;
 
         --c)
@@ -193,6 +184,10 @@ while [ $# -ne 0 ] ; do
             shift
             ;;
 
+        -*)
+            usage 1
+            ;;
+
         *)  break
             ;;
 
@@ -202,6 +197,9 @@ done
 # end of switch block
 
 
+[ $# -eq 0 ] && echo "PLEASE ENTER A VALID EXPRESSION TO GREP"  && usage 1
+
+[ ! -d "$DIR" ] && echo "Directory does not exist" && exit 1
 
 # This executes the findgrep function and then passes the value of the last positional arguement to the function.
 findgrep "$1"
