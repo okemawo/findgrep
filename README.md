@@ -1,6 +1,3 @@
-# Find Grep
-<br/>
-
 ## Name : findgrep Bash Script
 ## Author : Okemawo Aniyikaiye Obaodfin (OAO)
 ## Date : 03 November 2022
